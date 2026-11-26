@@ -4,17 +4,27 @@ import java.util.List;
 
 public class Tier2Scheduler {
 
-    
     private final List<Process> queue = new ArrayList<>();
-    
-    private final java.util.Map<Process, Integer> entryTimes = new java.util.HashMap<>();
-    
-    private final int contextSwitchingTime;
 
-    private static final int AGING_INTERVAL = 4;
+    private final java.util.Map<Process, Integer> entryTimes = new java.util.HashMap<>();
+
+    private final int contextSwitchingTime;
+    public static final int DEFAULT_AGING_INTERVAL = 4;
+    private final int agingInterval;
+
 
     public Tier2Scheduler(int contextSwitchingTime) {
+        this(contextSwitchingTime, DEFAULT_AGING_INTERVAL);
+    }
+
+
+    public Tier2Scheduler(int contextSwitchingTime, int agingInterval) {
         this.contextSwitchingTime = contextSwitchingTime;
+        this.agingInterval = (agingInterval > 0) ? agingInterval : DEFAULT_AGING_INTERVAL;
+    }
+
+    public int getAgingInterval() {
+        return agingInterval;
     }
 
     public void addProcess(Process process, int currentTime) {
@@ -40,7 +50,7 @@ public class Tier2Scheduler {
 
         int waitingTime = currentTime - enteredAt;
 
-        int aging = waitingTime / AGING_INTERVAL;
+        int aging = waitingTime / agingInterval;
 
         return process.getInitialPriority() - aging;
     }
@@ -52,7 +62,6 @@ public class Tier2Scheduler {
     public Process peekNextProcess(int currentTime) {
         return selectNextProcess(currentTime);
     }
-
 
     private Process selectNextProcess(int currentTime) {
 
@@ -120,8 +129,7 @@ public class Tier2Scheduler {
                 current,
                 contextSwitchStart,
                 startTime,
-                time
-        );
+                time);
     }
 
     public List<Process> getQueue() {

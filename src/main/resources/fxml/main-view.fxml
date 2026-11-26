@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gui.MainController"
+            prefHeight="760.0" prefWidth="1200.0"
+            stylesheets="@../css/style.css">
+
+    <!-- Top Navigation Header -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-bar">
+            <!-- App Titles -->
+            <VBox spacing="2.0">
+                <Label text="CPU Scheduler" styleClass="app-title"/>
+                <Label text="CS241 Operating Systems, Assignment 2" styleClass="app-subtitle"/>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Algorithm Toggle Group -->
+            <HBox styleClass="algo-toggle-group">
+                <ToggleButton fx:id="btnSjf" text="Preemptive SJF" styleClass="algo-toggle-btn"/>
+                <ToggleButton fx:id="btnAcs" text="Adaptive Container Scheduler" styleClass="algo-toggle-btn" selected="true"/>
+            </HBox>
+
+            <!-- Actions -->
+            <Button fx:id="btnClear" text="Clear results" onAction="#handleClearResults" styleClass="btn-clear"/>
+            <Button fx:id="btnRun" text="Run simulation" onAction="#handleRunSimulation" styleClass="btn-run"/>
+        </HBox>
+    </top>
+
+    <!-- Main Content Area -->
+    <center>
+        <HBox spacing="16.0">
+            <padding>
+                <Insets top="0.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+
+            <!-- Left Sidebar (Configuration & Process Input) -->
+            <VBox spacing="14.0" prefWidth="330.0" minWidth="300.0" maxWidth="350.0">
+
+                <!-- Parameters Card -->
+                <VBox spacing="12.0" styleClass="card-panel">
+                    <Label text="Parameters" styleClass="section-title"/>
+
+                    <GridPane vgap="10.0" hgap="10.0">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                            <ColumnConstraints minWidth="80.0" prefWidth="90.0"/>
+                        </columnConstraints>
+
+                        <Label text="Time quantum (Q)" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <Spinner fx:id="spinnerQuantum" editable="true" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Context switch (CS)" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <Spinner fx:id="spinnerContextSwitch" editable="true" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Aging step" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <Spinner fx:id="spinnerAgingStep" editable="true" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    </GridPane>
+
+                    <Label text="In Tier 2, a waiting process gains 1 priority for every Aging step time units it waits."
+                           styleClass="help-text"/>
+                </VBox>
+
+                <!-- Processes Card -->
+                <VBox spacing="10.0" styleClass="card-panel" VBox.vgrow="ALWAYS">
+                    <Label text="Processes" styleClass="section-title"/>
+
+                    <!-- Test Case Preset Selector -->
+                    <ComboBox fx:id="comboTestCase" maxWidth="Infinity"/>
+
+                    <!-- Process Input Table -->
+                    <TableView fx:id="tableProcessInput" editable="true" VBox.vgrow="ALWAYS" prefHeight="220.0">
+                        <columns>
+                            <TableColumn fx:id="colInputPid" text="Process" prefWidth="70.0"/>
+                            <TableColumn fx:id="colInputArrival" text="Arrival" prefWidth="65.0"/>
+                            <TableColumn fx:id="colInputBurst" text="Burst" prefWidth="65.0"/>
+                            <TableColumn fx:id="colInputPriority" text="Priority" prefWidth="65.0"/>
+                        </columns>
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+                    </TableView>
+
+                    <!-- Table Action Buttons -->
+                    <HBox spacing="8.0">
+                        <Button fx:id="btnAddProcess" text="Add process" onAction="#handleAddProcess" styleClass="btn-secondary"/>
+                        <Button fx:id="btnRemoveProcess" text="Remove" onAction="#handleRemoveProcess" styleClass="btn-secondary"/>
+                        <Button fx:id="btnClearProcesses" text="Clear all" onAction="#handleClearProcesses" styleClass="btn-secondary"/>
+                    </HBox>
+
+                    <Label text="Double-click a cell to edit. A lower priority number means more urgent."
+                           styleClass="help-text"/>
+                </VBox>
+            </VBox>
+
+            <!-- Right Workspace (Results Dashboard) -->
+            <VBox spacing="14.0" HBox.hgrow="ALWAYS">
+
+                <!-- Summary Stat Cards -->
+                <HBox spacing="14.0">
+                    <!-- Avg Waiting Time -->
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblAvgWaiting" text="-" styleClass="metric-value"/>
+                        <Label text="Average waiting time" styleClass="metric-label"/>
+                    </VBox>
+
+                    <!-- Avg Turnaround Time -->
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblAvgTurnaround" text="-" styleClass="metric-value"/>
+                        <Label text="Average turnaround time" styleClass="metric-label"/>
+                    </VBox>
+
+                    <!-- Avg Response Time -->
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblAvgResponse" text="-" styleClass="metric-value"/>
+                        <Label text="Average response time" styleClass="metric-label"/>
+                    </VBox>
+
+                    <!-- CPU Utilization -->
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblCpuUtilization" text="-" styleClass="metric-value"/>
+                        <Label text="CPU utilization" styleClass="metric-label"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Results Tabs -->
+                <TabPane fx:id="tabPaneResults" tabClosingPolicy="UNAVAILABLE" styleClass="dashboard-tabs" VBox.vgrow="ALWAYS">
+
+                    <!-- Tab 1: Timeline -->
+                    <Tab text="Timeline">
+                        <VBox spacing="12.0">
+                            <!-- Scrollable Timeline Canvas Container -->
+                            <ScrollPane fx:id="scrollTimeline" fitToHeight="true" vbarPolicy="NEVER" hbarPolicy="AS_NEEDED"
+                                        styleClass="timeline-scroll-pane" VBox.vgrow="ALWAYS">
+                                <StackPane fx:id="timelineContainer" minHeight="140.0" minWidth="600.0">
+                                    <Label fx:id="lblTimelinePlaceholder" text="Run a simulation to draw the timeline."
+                                           styleClass="placeholder-text"/>
+                                    <Pane fx:id="paneTimeline" visible="false"/>
+                                </StackPane>
+                            </ScrollPane>
+
+                            <!-- Legend -->
+                            <HBox fx:id="legendContainer" spacing="14.0" alignment="CENTER_LEFT">
+                                <padding>
+                                    <Insets top="4.0" right="10.0" bottom="4.0" left="10.0"/>
+                                </padding>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Tab 2: Time-step matrix -->
+                    <Tab text="Time-step matrix">
+                        <VBox spacing="10.0">
+                            <TableView fx:id="tableMatrix" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="colMatrixTime" text="Time" prefWidth="80.0"/>
+                                    <TableColumn fx:id="colMatrixProcess" text="Process" prefWidth="100.0"/>
+                                    <TableColumn fx:id="colMatrixTier" text="Tier" prefWidth="600.0"/>
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                </columnResizePolicy>
+                                <placeholder>
+                                    <Label text="Time-step matrix is available for Adaptive Container Scheduler (ACS)."
+                                           styleClass="placeholder-text"/>
+                                </placeholder>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Tab 3: Process metrics -->
+                    <Tab text="Process metrics">
+                        <VBox spacing="10.0">
+                            <TableView fx:id="tableMetrics" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="colMetricPid" text="Process" prefWidth="90.0"/>
+                                    <TableColumn fx:id="colMetricArrival" text="Arrival" prefWidth="90.0"/>
+                                    <TableColumn fx:id="colMetricBurst" text="Burst" prefWidth="90.0"/>
+                                    <TableColumn fx:id="colMetricFinish" text="Finish" prefWidth="90.0"/>
+                                    <TableColumn fx:id="colMetricTurnaround" text="Turnaround" prefWidth="110.0"/>
+                                    <TableColumn fx:id="colMetricWaiting" text="Waiting" prefWidth="110.0"/>
+                                    <TableColumn fx:id="colMetricResponse" text="Response" prefWidth="110.0"/>
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                </columnResizePolicy>
+                                <placeholder>
+                                    <Label text="Run a simulation to view process metrics." styleClass="placeholder-text"/>
+                                </placeholder>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Tab 4: Quantum and Context Switch analysis -->
+                    <Tab text="Quantum and Context Switch analysis">
+                        <VBox spacing="14.0">
+                            <!-- Analysis Controls -->
+                            <VBox spacing="6.0">
+                                <HBox spacing="12.0" alignment="CENTER_LEFT">
+                                    <Label text="Q from" styleClass="field-label"/>
+                                    <Spinner fx:id="spinnerQFrom" editable="true" prefWidth="75.0"/>
+
+                                    <Label text="Q to" styleClass="field-label"/>
+                                    <Spinner fx:id="spinnerQTo" editable="true" prefWidth="75.0"/>
+
+                                    <Label text="Q step" styleClass="field-label"/>
+                                    <Spinner fx:id="spinnerQStep" editable="true" prefWidth="75.0"/>
+
+                                    <Label text="CS values (comma separated)" styleClass="field-label"/>
+                                    <TextField fx:id="txtCsValues" text="0, 1, 2, 3" prefWidth="120.0"/>
+
+                                    <Button fx:id="btnGenerateGraphs" text="Generate graphs" onAction="#handleGenerateGraphs" styleClass="btn-run"/>
+                                    <Button fx:id="btnSavePng" text="Save as PNG" onAction="#handleSavePng" styleClass="btn-clear"/>
+                                </HBox>
+                                <Label text="Each line is one context-switch cost. The sweep uses the processes in the sidebar and the aging step set there."
+                                       styleClass="help-text"/>
+                            </VBox>
+
+                            <!-- Charts Side by Side -->
+                            <HBox fx:id="chartsContainer" spacing="16.0" VBox.vgrow="ALWAYS">
+                                <LineChart fx:id="chartWaiting" title="Average waiting time" HBox.hgrow="ALWAYS">
+                                    <xAxis>
+                                        <NumberAxis fx:id="axisWaitingX" label="Quantum (Q)" autoRanging="true"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis fx:id="axisWaitingY" label="Time units" autoRanging="true"/>
+                                    </yAxis>
+                                </LineChart>
+
+                                <LineChart fx:id="chartTurnaround" title="Average turnaround time" HBox.hgrow="ALWAYS">
+                                    <xAxis>
+                                        <NumberAxis fx:id="axisTurnaroundX" label="Quantum (Q)" autoRanging="true"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis fx:id="axisTurnaroundY" label="Time units" autoRanging="true"/>
+                                    </yAxis>
+                                </LineChart>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                </TabPane>
+
+            </VBox>
+        </HBox>
+    </center>
+
+</BorderPane>

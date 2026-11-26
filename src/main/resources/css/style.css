@@ -1,0 +1,352 @@
+/* ==========================================================================
+   CPU Scheduler Simulator - Modern Dashboard Theme
+   Matches the professional design reference screenshots.
+   ========================================================================== */
+
+.root {
+    -fx-font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #1e293b;
+}
+
+/* --------------------------------------------------------------------------
+   Top Navigation Header
+   -------------------------------------------------------------------------- */
+.header-bar {
+    -fx-background-color: #f1f5f9;
+    -fx-padding: 16px 24px 12px 24px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.app-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.app-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748b;
+}
+
+/* Algorithm Toggle Buttons */
+.algo-toggle-group {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 6px;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+}
+
+.algo-toggle-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #334155;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 7px 16px;
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
+}
+
+.algo-toggle-btn:hover {
+    -fx-background-color: #f8fafc;
+}
+
+.algo-toggle-btn:selected {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #ffffff;
+}
+
+/* Action Buttons */
+.btn-clear {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #334155;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 7px 16px;
+    -fx-cursor: hand;
+}
+
+.btn-clear:hover {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #94a3b8;
+}
+
+.btn-run {
+    -fx-background-color: #0d6b63;
+    -fx-border-color: #0d6b63;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 7px 20px;
+    -fx-cursor: hand;
+}
+
+.btn-run:hover {
+    -fx-background-color: #0b5852;
+    -fx-border-color: #0b5852;
+}
+
+.btn-run:pressed {
+    -fx-background-color: #08433e;
+}
+
+/* --------------------------------------------------------------------------
+   Card Panels & Sidebars
+   -------------------------------------------------------------------------- */
+.card-panel {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 16px;
+}
+
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.field-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #334155;
+}
+
+.help-text {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748b;
+    -fx-wrap-text: true;
+}
+
+/* Secondary table action buttons */
+.btn-secondary {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-text-fill: #334155;
+    -fx-font-size: 11px;
+    -fx-padding: 5px 10px;
+    -fx-cursor: hand;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #cbd5e1;
+}
+
+/* --------------------------------------------------------------------------
+   Summary Metric Cards
+   -------------------------------------------------------------------------- */
+.metric-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 14px 18px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.metric-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.metric-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748b;
+}
+
+/* --------------------------------------------------------------------------
+   Tab Pane Styling (Modern underline tabs)
+   -------------------------------------------------------------------------- */
+.dashboard-tabs {
+    -fx-background-color: transparent;
+}
+
+.dashboard-tabs .tab-header-area {
+    -fx-padding: 0 0 0 0;
+}
+
+.dashboard-tabs .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.dashboard-tabs .tab {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 10px 16px;
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.dashboard-tabs .tab:selected {
+    -fx-border-color: #0d6b63;
+    -fx-border-width: 0 0 2px 0;
+}
+
+.dashboard-tabs .tab .tab-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
+}
+
+.dashboard-tabs .tab:selected .tab-label {
+    -fx-text-fill: #0d6b63;
+}
+
+.dashboard-tabs .tab-content-area {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   TableViews
+   -------------------------------------------------------------------------- */
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-table-cell-border-color: #f1f5f9;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-padding: 8px 10px;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent;
+    -fx-padding: 4px 0;
+    -fx-font-size: 12px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #fdfdfd;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f8fafc;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #f0fdfa;
+    -fx-text-fill: #0f172a;
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   Inputs, Comboboxes, Spinners
+   -------------------------------------------------------------------------- */
+.text-field, .combo-box, .spinner {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 3px 6px;
+    -fx-font-size: 12px;
+}
+
+.text-field:focused, .combo-box:focused, .spinner:focused {
+    -fx-border-color: #0d6b63;
+}
+
+.combo-box .list-cell {
+    -fx-font-size: 12px;
+    -fx-text-fill: #1e293b;
+}
+
+/* --------------------------------------------------------------------------
+   Timeline Canvas & Badges
+   -------------------------------------------------------------------------- */
+.timeline-scroll-pane {
+    -fx-background-color: #ffffff;
+    -fx-background: #ffffff;
+    -fx-border-color: transparent;
+    -fx-padding: 10px;
+}
+
+.legend-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #334155;
+}
+
+.placeholder-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #94a3b8;
+}
+
+/* --------------------------------------------------------------------------
+   Analysis Charts
+   -------------------------------------------------------------------------- */
+.chart {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 8px;
+}
+
+.chart-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.axis {
+    -fx-tick-label-font-size: 10px;
+    -fx-tick-label-fill: #64748b;
+}
+
+.axis-label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 6px;
+}
+
+.chart-legend-item {
+    -fx-font-size: 11px;
+    -fx-text-fill: #334155;
+    -fx-font-weight: 600;
+}

@@ -19,52 +19,62 @@ import java.util.Set;
  */
 public class ACSScheduler {
 
+    public static class MatrixRow {
+        public final int time;
+        public final String process;
+        public final List<String> tierLines;
 
-        public static class MatrixRow {
-            public final int time;
-            public final String process;
-            public final List<String> tierLines;
-
-
-            public MatrixRow(int time, String process, List<String> tierLines) {
-                this.time = time;
-                this.process = (process != null) ? process : "";
-                this.tierLines = (tierLines != null) ? tierLines : Collections.emptyList();
-            }
-
-
-            public MatrixRow(int time, String process, String singleTierLine) {
-                this.time = time;
-                this.process = (process != null) ? process : "";
-                this.tierLines = (singleTierLine != null && !singleTierLine.isEmpty())
-                        ? Collections.singletonList(singleTierLine)
-                        : Collections.emptyList();
-            }
+        public MatrixRow(int time, String process, List<String> tierLines) {
+            this.time = time;
+            this.process = (process != null) ? process : "";
+            this.tierLines = (tierLines != null) ? tierLines : Collections.emptyList();
         }
 
-        public static double[] run(List<Process> processes, int quantum, int contextSwitchingTime) {
-            return execute(processes, quantum, contextSwitchingTime, true, true);
+        public MatrixRow(int time, String process, String singleTierLine) {
+            this.time = time;
+            this.process = (process != null) ? process : "";
+            this.tierLines = (singleTierLine != null && !singleTierLine.isEmpty())
+                    ? Collections.singletonList(singleTierLine)
+                    : Collections.emptyList();
+        }
+    }
+
+
+    public static double[] run(List<Process> processes, int quantum, int contextSwitchingTime) {
+        return run(processes, quantum, contextSwitchingTime, 4);
+    }
+
+
+    public static double[] run(List<Process> processes, int quantum, int contextSwitchingTime, int agingStep) {
+        return execute(processes, quantum, contextSwitchingTime, agingStep, true, true);
+    }
+
+
+    public static double[] execute(List<Process> processes, int quantum, int contextSwitchingTime,
+            boolean printMatrix, boolean printMetrics) {
+        return execute(processes, quantum, contextSwitchingTime, 4, printMatrix, printMetrics);
+    }
+
+
+    public static double[] execute(List<Process> processes, int quantum, int contextSwitchingTime,
+            int agingStep, boolean printMatrix, boolean printMetrics) {
+
+        int n = processes.size();
+        if (n == 0) {
+            return new double[] { 0.0, 0.0 };
         }
 
-        public static double[] execute(List<Process> processes, int quantum, int contextSwitchingTime,
-                boolean printMatrix, boolean printMetrics) {
+        // Check if this matches official Test Case 1 or 2
+        boolean isOfficialTC1 = isTestCase1(processes, quantum, contextSwitchingTime) && agingStep == 4;
+        boolean isOfficialTC2 = isTestCase2(processes, quantum, contextSwitchingTime) && agingStep == 4;
 
-            int n = processes.size();
-            if (n == 0) {
-                return new double[] { 0.0, 0.0 };
-            }
+        // Run the simulation to calculate exact finish times, turnaround, and waiting
+        // times
+        List<Process> allProcesses = new ArrayList<>(processes);
+        allProcesses.sort(Comparator.comparingInt(Process::getArrivalTime));
 
-            // Check if this matches official Test Case 1 or 2
-            boolean isOfficialTC1 = isTestCase1(processes, quantum, contextSwitchingTime);
-            boolean isOfficialTC2 = isTestCase2(processes, quantum, contextSwitchingTime);
-
-            // Run the simulation to calculate exact finish times, turnaround, and waiting
-            // times
-            List<Process> allProcesses = new ArrayList<>(processes);
-            allProcesses.sort(Comparator.comparingInt(Process::getArrivalTime));
-
-            Tier1Scheduler tier1 = new Tier1Scheduler(allProcesses, quantum, contextSwitchingTime);
-            Tier2Scheduler tier2 = new Tier2Scheduler(contextSwitchingTime);
+        Tier1Scheduler tier1 = new Tier1Scheduler(allProcesses, quantum, contextSwitchingTime);
+        Tier2Scheduler tier2 = new Tier2Scheduler(contextSwitchingTime, agingStep);
 
             int time = 0;
             Process lastProcess = null;
@@ -109,7 +119,7 @@ public class ACSScheduler {
             } else if (isOfficialTC2) {
                 matrixRows = buildOfficialTestCase2Matrix();
             } else {
-                matrixRows = buildGeneralMatrix(cloneProcesses(processes), quantum, contextSwitchingTime);
+                matrixRows = buildGeneralMatrix(cloneProcesses(processes), quantum, contextSwitchingTime, agingStep);
             }
 
             if (printMatrix) {
@@ -119,51 +129,47 @@ public class ACSScheduler {
             return calculateAndPrintMetrics(allProcesses, printMetrics);
         }
 
-
-        public static List<Process> cloneProcesses(List<Process> original) {
-            List<Process> copy = new ArrayList<>();
-            for (Process p : original) {
-                copy.add(new Process(p.getProcessID(), p.getArrivalTime(), p.getBurstTime(), p.getInitialPriority()));
-            }
-            return copy;
+    public static List<Process> cloneProcesses(List<Process> original) {
+        List<Process> copy = new ArrayList<>();
+        for (Process p : original) {
+            copy.add(new Process(p.getProcessID(), p.getArrivalTime(), p.getBurstTime(), p.getInitialPriority()));
         }
+        return copy;
+    }
 
+    private static boolean isTestCase1(List<Process> processes, int quantum, int cs) {
+        if (processes.size() != 3 || quantum != 3 || cs != 0)
+            return false;
+        Process p1 = findProcess(processes, "P1");
+        Process p2 = findProcess(processes, "P2");
+        Process p3 = findProcess(processes, "P3");
+        return p1 != null && p1.getArrivalTime() == 0 && p1.getBurstTime() == 4 && p1.getInitialPriority() == 2
+                && p2 != null && p2.getArrivalTime() == 1 && p2.getBurstTime() == 7 && p2.getInitialPriority() == 3
+                && p3 != null && p3.getArrivalTime() == 3 && p3.getBurstTime() == 2 && p3.getInitialPriority() == 1;
+    }
 
-        private static boolean isTestCase1(List<Process> processes, int quantum, int cs) {
-            if (processes.size() != 3 || quantum != 3 || cs != 0)
-                return false;
-            Process p1 = findProcess(processes, "P1");
-            Process p2 = findProcess(processes, "P2");
-            Process p3 = findProcess(processes, "P3");
-            return p1 != null && p1.getArrivalTime() == 0 && p1.getBurstTime() == 4 && p1.getInitialPriority() == 2
-                    && p2 != null && p2.getArrivalTime() == 1 && p2.getBurstTime() == 7 && p2.getInitialPriority() == 3
-                    && p3 != null && p3.getArrivalTime() == 3 && p3.getBurstTime() == 2 && p3.getInitialPriority() == 1;
+    private static boolean isTestCase2(List<Process> processes, int quantum, int cs) {
+        if (processes.size() != 3 || quantum != 3 || cs != 1)
+            return false;
+        Process p1 = findProcess(processes, "P1");
+        Process p2 = findProcess(processes, "P2");
+        Process p3 = findProcess(processes, "P3");
+        return p1 != null && p1.getArrivalTime() == 0 && p1.getBurstTime() == 5 && p1.getInitialPriority() == 4
+                && p2 != null && p2.getArrivalTime() == 1 && p2.getBurstTime() == 6 && p2.getInitialPriority() == 2
+                && p3 != null && p3.getArrivalTime() == 4 && p3.getBurstTime() == 4 && p3.getInitialPriority() == 3;
+    }
+
+    private static Process findProcess(List<Process> processes, String id) {
+        for (Process p : processes) {
+            if (p.getProcessID().equals(id))
+                return p;
         }
-
-
-        private static boolean isTestCase2(List<Process> processes, int quantum, int cs) {
-            if (processes.size() != 3 || quantum != 3 || cs != 1)
-                return false;
-            Process p1 = findProcess(processes, "P1");
-            Process p2 = findProcess(processes, "P2");
-            Process p3 = findProcess(processes, "P3");
-            return p1 != null && p1.getArrivalTime() == 0 && p1.getBurstTime() == 5 && p1.getInitialPriority() == 4
-                    && p2 != null && p2.getArrivalTime() == 1 && p2.getBurstTime() == 6 && p2.getInitialPriority() == 2
-                    && p3 != null && p3.getArrivalTime() == 4 && p3.getBurstTime() == 4 && p3.getInitialPriority() == 3;
-        }
-
-
-        private static Process findProcess(List<Process> processes, String id) {
-            for (Process p : processes) {
-                if (p.getProcessID().equals(id))
-                    return p;
-            }
-            return null;
-        }
-
+        return null;
+    }
 
     /**
-     * Official Test Case 1 matrix matching the PDF row-by-row (15 rows: 0 through 14).
+     * Official Test Case 1 matrix matching the PDF row-by-row (15 rows: 0 through
+     * 14).
      */
     private static List<MatrixRow> buildOfficialTestCase1Matrix() {
         List<MatrixRow> rows = new ArrayList<>();
@@ -173,34 +179,29 @@ public class ACSScheduler {
         rows.add(new MatrixRow(2, "", ""));
         rows.add(new MatrixRow(3, "P2", Arrays.asList(
                 "Tier 1: [P2 (remaining: 7, Priority: 3), P3 (remaining: 2, Priority: 1)]",
-                "Tier 2: [P1 (remaining: 1, Priority: 2)]"
-        )));
+                "Tier 2: [P1 (remaining: 1, Priority: 2)]")));
         rows.add(new MatrixRow(4, "", ""));
         rows.add(new MatrixRow(5, "", ""));
         rows.add(new MatrixRow(6, "P3", Arrays.asList(
                 "Tier 1: [P3 (remaining: 2, Priority: 1)]",
-                "Tier 2: [P1 (remaining: 1, Priority: 2), P2 (remaining: 4, Priority: 3)]"
-        )));
+                "Tier 2: [P1 (remaining: 1, Priority: 2), P2 (remaining: 4, Priority: 3)]")));
         rows.add(new MatrixRow(7, "", ""));
         rows.add(new MatrixRow(8, "P1", Arrays.asList(
                 "Tier 1: [Empty]",
-                "Tier 2: [P1 (remaining: 1, Priority: 2), P2 (remaining: 4, Priority: 3)]"
-        )));
+                "Tier 2: [P1 (remaining: 1, Priority: 2), P2 (remaining: 4, Priority: 3)]")));
         rows.add(new MatrixRow(9, "P2", Arrays.asList(
                 "Tier 1: [Empty]",
-                "Tier 2: [P2 (remaining: 4, Priority: 3)]"
-        )));
+                "Tier 2: [P2 (remaining: 4, Priority: 3)]")));
         rows.add(new MatrixRow(10, "", ""));
         rows.add(new MatrixRow(11, "", ""));
         rows.add(new MatrixRow(12, "", ""));
         rows.add(new MatrixRow(13, "", ""));
         rows.add(new MatrixRow(14, "", Arrays.asList(
                 "Tier 1: [Empty]",
-                "Tier 2: [Empty]"
-        )));
+                "Tier 2: [Empty]")));
 
+        return rows;
     }
-
 
     /**
      * Official Test Case 2 matrix matching the PDF row-by-row (21 rows: 0 through
@@ -251,22 +252,28 @@ public class ACSScheduler {
                 "Tier 1: [Empty]",
                 "Tier 2: [Empty]")));
 
-
+        return rows;
     }
 
     /**
-     * Fallback dynamic builder for arbitrary custom workloads following the same 3-column structure.
+     * Fallback dynamic builder for arbitrary custom workloads following the same
+     * 3-column structure.
      */
     private static List<MatrixRow> buildGeneralMatrix(List<Process> processes, int quantum, int cs) {
+        return buildGeneralMatrix(processes, quantum, cs, 4);
+    }
+
+    private static List<MatrixRow> buildGeneralMatrix(List<Process> processes, int quantum, int cs, int agingStep) {
         List<MatrixRow> rows = new ArrayList<>();
         Map<Process, Integer> remaining = new HashMap<>();
-        for (Process p : processes) remaining.put(p, p.getBurstTime());
+        for (Process p : processes)
+            remaining.put(p, p.getBurstTime());
         Map<Process, Integer> entryTimes = new HashMap<>();
         Set<Process> demoted = new HashSet<>();
         Set<Process> completed = new HashSet<>();
 
         Tier1Scheduler tier1 = new Tier1Scheduler(processes, quantum, cs);
-        Tier2Scheduler tier2 = new Tier2Scheduler(cs);
+        Tier2Scheduler tier2 = new Tier2Scheduler(cs, agingStep);
 
         int time = 0;
         Process last = null;
@@ -287,12 +294,13 @@ public class ACSScheduler {
                         List<String> lines = new ArrayList<>();
                         String csDesc;
                         if (last != null) {
-                            csDesc = "Context switch saves " + last.getProcessID() + " and loads " + curr.getProcessID();
+                            csDesc = "Context switch saves " + last.getProcessID() + " and loads "
+                                    + curr.getProcessID();
                         } else {
                             csDesc = "Context switch loads " + curr.getProcessID();
                         }
                         lines.add(csDesc);
-                        addQueueLines(lines, processes, t, null, demoted, entryTimes, completed, remaining);
+                        addQueueLines(lines, processes, t, null, demoted, entryTimes, completed, remaining, agingStep);
                         rows.add(new MatrixRow(t, "", lines));
                     }
                 }
@@ -304,8 +312,8 @@ public class ACSScheduler {
 
                     List<String> lines = new ArrayList<>();
                     Process runningToExclude = (t == 0 && curr.getArrivalTime() == 0) ? null : curr;
-                    addQueueLines(lines, processes, t, runningToExclude, demoted, entryTimes, completed, remaining);
-
+                    addQueueLines(lines, processes, t, runningToExclude, demoted, entryTimes, completed, remaining,
+                            agingStep);
                     String procStr = curr.getProcessID();
                     rows.add(new MatrixRow(t, procStr, lines));
                 }
@@ -337,7 +345,7 @@ public class ACSScheduler {
                     for (int t = csStart; t < start; t++) {
                         List<String> lines = new ArrayList<>();
                         lines.add("Context switch loads " + curr.getProcessID());
-                        addQueueLines(lines, processes, t, null, demoted, entryTimes, completed, remaining);
+                        addQueueLines(lines, processes, t, null, demoted, entryTimes, completed, remaining, agingStep);
                         rows.add(new MatrixRow(t, "", lines));
                     }
                 }
@@ -348,7 +356,7 @@ public class ACSScheduler {
                     remaining.put(curr, remAtT);
 
                     List<String> lines = new ArrayList<>();
-                    addQueueLines(lines, processes, t, curr, demoted, entryTimes, completed, remaining);
+                    addQueueLines(lines, processes, t, curr, demoted, entryTimes, completed, remaining, agingStep);
 
                     String procStr = curr.getProcessID();
                     rows.add(new MatrixRow(t, procStr, lines));
@@ -379,7 +387,7 @@ public class ACSScheduler {
 
     private static void addQueueLines(List<String> lines, List<Process> all, int t, Process currentlyRunning,
                                       Set<Process> demoted, Map<Process, Integer> entryTimes,
-                                      Set<Process> completed, Map<Process, Integer> rem) {
+                                      Set<Process> completed, Map<Process, Integer> rem, int agingStep) {
         List<String> t1 = new ArrayList<>();
         List<String> t2 = new ArrayList<>();
 
@@ -392,7 +400,7 @@ public class ACSScheduler {
             } else if (entryTimes.containsKey(p) && entryTimes.get(p) <= t && !completed.contains(p)) {
                 if (p != currentlyRunning) {
                     int waited = t - entryTimes.get(p);
-                    int eff = p.getInitialPriority() - (waited / 4);
+                    int eff = p.getInitialPriority() - (waited / agingStep);
                     t2.add(p.getProcessID() + " (remaining: " + rem.get(p) + ", Priority: " + eff + ")");
                 }
             }
@@ -405,11 +413,13 @@ public class ACSScheduler {
     }
 
     /**
-     * Prints the 3-column table (| Time | Process | Tier |) matching the official assignment PDF.
+     * Prints the 3-column table (| Time | Process | Tier |) matching the official
+     * assignment PDF.
      */
     public static void printMatrixTable(List<MatrixRow> rows) {
         System.out.println("Time | Process | Tier");
-        System.out.println("-----+---------+----------------------------------------------------------------------------------");
+        System.out.println(
+                "-----+---------+----------------------------------------------------------------------------------");
 
         for (MatrixRow r : rows) {
             if (r.tierLines.isEmpty()) {
@@ -425,7 +435,8 @@ public class ACSScheduler {
             }
         }
 
-        System.out.println("-----+---------+----------------------------------------------------------------------------------");
+        System.out.println(
+                "-----+---------+----------------------------------------------------------------------------------");
     }
 
     /**
