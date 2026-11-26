@@ -7,27 +7,30 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="gui.MainController"
-            prefHeight="760.0" prefWidth="1200.0"
+            prefHeight="780.0" prefWidth="1240.0"
             stylesheets="@../css/style.css">
 
     <!-- Top Navigation Header -->
     <top>
         <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-bar">
-            <!-- App Titles -->
-            <VBox spacing="2.0">
-                <Label text="CPU Scheduler" styleClass="app-title"/>
-                <Label text="CS241 Operating Systems, Assignment 2" styleClass="app-subtitle"/>
-            </VBox>
+            <!-- App Logo Badge & Titles -->
+            <HBox alignment="CENTER_LEFT" spacing="12.0">
+                <Label text="CPU" styleClass="logo-badge"/>
+                <VBox spacing="2.0">
+                    <Label text="CPU Scheduler" styleClass="app-title"/>
+                    <Label text="CS241 – Operating Systems – Assignment 2" styleClass="app-subtitle"/>
+                </VBox>
+            </HBox>
 
             <Region HBox.hgrow="ALWAYS"/>
 
-            <!-- Algorithm Toggle Group -->
+            <!-- Algorithm Segmented Selector -->
             <HBox styleClass="algo-toggle-group">
                 <ToggleButton fx:id="btnSjf" text="Preemptive SJF" styleClass="algo-toggle-btn"/>
                 <ToggleButton fx:id="btnAcs" text="Adaptive Container Scheduler" styleClass="algo-toggle-btn" selected="true"/>
             </HBox>
 
-            <!-- Actions -->
+            <!-- Action Buttons -->
             <Button fx:id="btnClear" text="Clear results" onAction="#handleClearResults" styleClass="btn-clear"/>
             <Button fx:id="btnRun" text="Run simulation" onAction="#handleRunSimulation" styleClass="btn-run"/>
         </HBox>
@@ -37,20 +40,20 @@
     <center>
         <HBox spacing="16.0">
             <padding>
-                <Insets top="0.0" right="20.0" bottom="20.0" left="20.0"/>
+                <Insets top="16.0" right="20.0" bottom="20.0" left="20.0"/>
             </padding>
 
             <!-- Left Sidebar (Configuration & Process Input) -->
-            <VBox spacing="14.0" prefWidth="330.0" minWidth="300.0" maxWidth="350.0">
+            <VBox spacing="14.0" prefWidth="340.0" minWidth="310.0" maxWidth="360.0">
 
-                <!-- Parameters Card -->
+                <!-- Scheduling Parameters Card -->
                 <VBox spacing="12.0" styleClass="card-panel">
-                    <Label text="Parameters" styleClass="section-title"/>
+                    <Label text="Scheduling Parameters" styleClass="section-title"/>
 
                     <GridPane vgap="10.0" hgap="10.0">
                         <columnConstraints>
                             <ColumnConstraints hgrow="ALWAYS"/>
-                            <ColumnConstraints minWidth="80.0" prefWidth="90.0"/>
+                            <ColumnConstraints minWidth="85.0" prefWidth="95.0"/>
                         </columnConstraints>
 
                         <Label text="Time quantum (Q)" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
@@ -67,15 +70,15 @@
                            styleClass="help-text"/>
                 </VBox>
 
-                <!-- Processes Card -->
+                <!-- Process Configuration Card -->
                 <VBox spacing="10.0" styleClass="card-panel" VBox.vgrow="ALWAYS">
-                    <Label text="Processes" styleClass="section-title"/>
+                    <Label text="Process Configuration" styleClass="section-title"/>
 
                     <!-- Test Case Preset Selector -->
                     <ComboBox fx:id="comboTestCase" maxWidth="Infinity"/>
 
                     <!-- Process Input Table -->
-                    <TableView fx:id="tableProcessInput" editable="true" VBox.vgrow="ALWAYS" prefHeight="220.0">
+                    <TableView fx:id="tableProcessInput" editable="true" VBox.vgrow="ALWAYS" prefHeight="230.0">
                         <columns>
                             <TableColumn fx:id="colInputPid" text="Process" prefWidth="70.0"/>
                             <TableColumn fx:id="colInputArrival" text="Arrival" prefWidth="65.0"/>
@@ -102,28 +105,28 @@
             <!-- Right Workspace (Results Dashboard) -->
             <VBox spacing="14.0" HBox.hgrow="ALWAYS">
 
-                <!-- Summary Stat Cards -->
+                <!-- Summary Stat Cards (KPIs with subtle colored accent indicator bars) -->
                 <HBox spacing="14.0">
                     <!-- Avg Waiting Time -->
-                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                    <VBox styleClass="metric-card, metric-card-blue" HBox.hgrow="ALWAYS">
                         <Label fx:id="lblAvgWaiting" text="-" styleClass="metric-value"/>
                         <Label text="Average waiting time" styleClass="metric-label"/>
                     </VBox>
 
                     <!-- Avg Turnaround Time -->
-                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                    <VBox styleClass="metric-card, metric-card-violet" HBox.hgrow="ALWAYS">
                         <Label fx:id="lblAvgTurnaround" text="-" styleClass="metric-value"/>
                         <Label text="Average turnaround time" styleClass="metric-label"/>
                     </VBox>
 
                     <!-- Avg Response Time -->
-                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                    <VBox styleClass="metric-card, metric-card-mint" HBox.hgrow="ALWAYS">
                         <Label fx:id="lblAvgResponse" text="-" styleClass="metric-value"/>
                         <Label text="Average response time" styleClass="metric-label"/>
                     </VBox>
 
                     <!-- CPU Utilization -->
-                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                    <VBox styleClass="metric-card, metric-card-amber" HBox.hgrow="ALWAYS">
                         <Label fx:id="lblCpuUtilization" text="-" styleClass="metric-value"/>
                         <Label text="CPU utilization" styleClass="metric-label"/>
                     </VBox>
@@ -160,7 +163,7 @@
                             <TableView fx:id="tableMatrix" VBox.vgrow="ALWAYS">
                                 <columns>
                                     <TableColumn fx:id="colMatrixTime" text="Time" prefWidth="80.0"/>
-                                    <TableColumn fx:id="colMatrixProcess" text="Process" prefWidth="100.0"/>
+                                    <TableColumn fx:id="colMatrixProcess" text="Process" prefWidth="120.0"/>
                                     <TableColumn fx:id="colMatrixTier" text="Tier" prefWidth="600.0"/>
                                 </columns>
                                 <columnResizePolicy>

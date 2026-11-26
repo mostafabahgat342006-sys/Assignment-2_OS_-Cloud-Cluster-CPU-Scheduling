@@ -4,7 +4,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Side;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
@@ -26,8 +25,10 @@ import java.util.List;
 
 /**
  * Controller for the Quantum and Context Switch Analysis Tab.
- * Sweeps over Quantum values (Q from to Q to by Q step) and Context Switch values,
+ * Sweeps over Quantum values (Q from to Q to by Q step) and Context Switch
+ * values,
  * generating Average Waiting Time and Average Turnaround Time curves.
+ * Styled under the Midnight Control Center visual identity.
  */
 public class AnalysisController {
 
@@ -42,24 +43,24 @@ public class AnalysisController {
 
     private boolean hasGeneratedData = false;
 
-    // Distinct palette for different CS values matching reference style
+    // Midnight Control Center Analysis Series Palette
     private static final String[] CS_COLORS = {
-            "#ea580c", // CS 0: Orange / Red
-            "#eab308", // CS 1: Amber / Yellow
-            "#16a34a", // CS 2: Green
-            "#0ea5e9", // CS 3: Blue / Cyan
-            "#8b5cf6", // CS 4: Violet
-            "#ec4899", // CS 5: Pink
-            "#64748b"  // CS 6+: Slate
+            "#4F8CFF", // CS 0: Electric Blue
+            "#42D6AE", // CS 1: Mint Green
+            "#FFB454", // CS 2: Amber
+            "#9875FF", // CS 3: Violet
+            "#FF6B6B", // CS 4: Coral
+            "#00F2FE", // CS 5: Cyan
+            "#94A3B8"  // CS 6+: Slate
     };
 
     public AnalysisController(Spinner<Integer> spinnerQFrom,
-                              Spinner<Integer> spinnerQTo,
-                              Spinner<Integer> spinnerQStep,
-                              TextField txtCsValues,
-                              HBox chartsContainer,
-                              LineChart<Number, Number> chartWaiting,
-                              LineChart<Number, Number> chartTurnaround) {
+            Spinner<Integer> spinnerQTo,
+            Spinner<Integer> spinnerQStep,
+            TextField txtCsValues,
+            HBox chartsContainer,
+            LineChart<Number, Number> chartWaiting,
+            LineChart<Number, Number> chartTurnaround) {
         this.spinnerQFrom = spinnerQFrom;
         this.spinnerQTo = spinnerQTo;
         this.spinnerQStep = spinnerQStep;
@@ -91,24 +92,28 @@ public class AnalysisController {
     public List<Integer> parseCsValues() throws SimulationController.ValidationException {
         String raw = txtCsValues.getText();
         if (raw == null || raw.trim().isEmpty()) {
-            throw new SimulationController.ValidationException("Context Switch values cannot be empty. Please enter comma-separated non-negative integers (e.g. 0, 1, 2, 3).");
+            throw new SimulationController.ValidationException(
+                    "Context Switch values cannot be empty. Please enter comma-separated non-negative integers (e.g. 0, 1, 2, 3).");
         }
 
         String[] tokens = raw.split(",");
         List<Integer> list = new ArrayList<>();
         for (String t : tokens) {
             String s = t.trim();
-            if (s.isEmpty()) continue;
+            if (s.isEmpty())
+                continue;
             try {
                 int val = Integer.parseInt(s);
                 if (val < 0) {
-                    throw new SimulationController.ValidationException("Context Switch value '" + s + "' is negative. All CS values must be 0 or greater.");
+                    throw new SimulationController.ValidationException(
+                            "Context Switch value '" + s + "' is negative. All CS values must be 0 or greater.");
                 }
                 if (!list.contains(val)) {
                     list.add(val);
                 }
             } catch (NumberFormatException e) {
-                throw new SimulationController.ValidationException("Invalid Context Switch value '" + s + "'. Please enter valid integers separated by commas.");
+                throw new SimulationController.ValidationException(
+                        "Invalid Context Switch value '" + s + "'. Please enter valid integers separated by commas.");
             }
         }
 
@@ -119,7 +124,8 @@ public class AnalysisController {
         return list;
     }
 
-    public void generateAnalysis(List<Process> processes, int agingStep, boolean isAcs) throws SimulationController.ValidationException {
+    public void generateAnalysis(List<Process> processes, int agingStep, boolean isAcs)
+            throws SimulationController.ValidationException {
         // Validate Quantum parameters
         int qFrom = spinnerQFrom.getValue();
         int qTo = spinnerQTo.getValue();
@@ -129,7 +135,8 @@ public class AnalysisController {
             throw new SimulationController.ValidationException("Q from must be a positive integer greater than zero.");
         }
         if (qTo < qFrom) {
-            throw new SimulationController.ValidationException("Q to (" + qTo + ") must be greater than or equal to Q from (" + qFrom + ").");
+            throw new SimulationController.ValidationException(
+                    "Q to (" + qTo + ") must be greater than or equal to Q from (" + qFrom + ").");
         }
         if (qStep <= 0) {
             throw new SimulationController.ValidationException("Q step must be a positive integer greater than zero.");
@@ -138,7 +145,8 @@ public class AnalysisController {
         List<Integer> csValues = parseCsValues();
 
         if (processes == null || processes.isEmpty()) {
-            throw new SimulationController.ValidationException("Please enter at least one process in the sidebar to generate analysis.");
+            throw new SimulationController.ValidationException(
+                    "Please enter at least one process in the sidebar to generate analysis.");
         }
 
         // Clear existing chart data
@@ -178,7 +186,13 @@ public class AnalysisController {
     private void applySeriesColor(XYChart.Series<Number, Number> series, int index) {
         String color = CS_COLORS[index % CS_COLORS.length];
         if (series.getNode() != null) {
-            series.getNode().setStyle("-fx-stroke: " + color + "; -fx-stroke-width: 2px;");
+            series.getNode().setStyle("-fx-stroke: " + color + "; -fx-stroke-width: 2.2px;");
+        }
+        for (XYChart.Data<Number, Number> data : series.getData()) {
+            if (data.getNode() != null) {
+                data.getNode().setStyle("-fx-background-color: " + color
+                        + ", #0B1020; -fx-background-radius: 4px; -fx-padding: 3.5px;");
+            }
         }
     }
 

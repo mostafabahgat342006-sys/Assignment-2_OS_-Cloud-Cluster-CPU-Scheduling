@@ -1,69 +1,97 @@
 /* ==========================================================================
-   CPU Scheduler Simulator - Modern Dashboard Theme
-   Matches the professional design reference screenshots.
+   CPU Scheduler Simulator - Midnight Control Center Design Theme
+   A premium dark-themed desktop interface for OS CPU Scheduling analysis.
+   Colors:
+     - Main Background: Deep Midnight Navy (#0B1020)
+     - Secondary Surfaces: Dark Slate (#141C2F)
+     - Elevated Panels: (#1B2740)
+     - Primary Accent: Electric Blue (#4F8CFF)
+     - Secondary Accent: Violet (#9875FF)
+     - Success / Highlight: Mint Green (#42D6AE)
+     - Warning: Amber (#FFB454)
+     - Main Text: Soft White (#F1F5FF)
+     - Secondary Text: Muted Slate (#94A3B8)
+     - Subtle Borders: Dark Blue-Gray (#293650)
    ========================================================================== */
 
 .root {
-    -fx-font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
-    -fx-background-color: #f1f5f9;
-    -fx-text-fill: #1e293b;
+    -fx-font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    -fx-background-color: #0B1020;
+    -fx-text-fill: #F1F5FF;
 }
 
 /* --------------------------------------------------------------------------
    Top Navigation Header
    -------------------------------------------------------------------------- */
 .header-bar {
-    -fx-background-color: #f1f5f9;
-    -fx-padding: 16px 24px 12px 24px;
+    -fx-background-color: #141C2F;
+    -fx-border-color: transparent transparent #293650 transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 14px 24px 14px 24px;
     -fx-alignment: CENTER_LEFT;
 }
 
-.app-title {
-    -fx-font-size: 20px;
+.logo-badge {
+    -fx-background-color: #1B2740;
+    -fx-background-radius: 6px;
+    -fx-border-color: #4F8CFF;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-padding: 4px 8px;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
-    -fx-text-fill: #0f172a;
+    -fx-text-fill: #4F8CFF;
+    -fx-alignment: CENTER;
+}
+
+.app-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F1F5FF;
 }
 
 .app-subtitle {
-    -fx-font-size: 12px;
-    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+    -fx-text-fill: #94A3B8;
 }
 
-/* Algorithm Toggle Buttons */
+/* Algorithm Segmented Selector */
 .algo-toggle-group {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #141C2F;
     -fx-background-radius: 6px;
-    -fx-border-color: #cbd5e1;
+    -fx-border-color: #293650;
     -fx-border-radius: 6px;
     -fx-border-width: 1px;
+    -fx-padding: 2px;
 }
 
 .algo-toggle-btn {
     -fx-background-color: transparent;
-    -fx-text-fill: #334155;
+    -fx-text-fill: #94A3B8;
     -fx-font-size: 12px;
     -fx-font-weight: 600;
-    -fx-padding: 7px 16px;
+    -fx-padding: 6px 16px;
     -fx-cursor: hand;
-    -fx-background-radius: 5px;
+    -fx-background-radius: 4px;
 }
 
 .algo-toggle-btn:hover {
-    -fx-background-color: #f8fafc;
+    -fx-background-color: #1B2740;
+    -fx-text-fill: #F1F5FF;
 }
 
 .algo-toggle-btn:selected {
-    -fx-background-color: #1e293b;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: #4F8CFF;
+    -fx-text-fill: #FFFFFF;
 }
 
 /* Action Buttons */
 .btn-clear {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #cbd5e1;
+    -fx-background-color: #1B2740;
+    -fx-border-color: #293650;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
-    -fx-text-fill: #334155;
+    -fx-text-fill: #F1F5FF;
     -fx-font-size: 12px;
     -fx-font-weight: 600;
     -fx-padding: 7px 16px;
@@ -71,16 +99,16 @@
 }
 
 .btn-clear:hover {
-    -fx-background-color: #f8fafc;
-    -fx-border-color: #94a3b8;
+    -fx-background-color: #253555;
+    -fx-border-color: #4F8CFF;
 }
 
 .btn-run {
-    -fx-background-color: #0d6b63;
-    -fx-border-color: #0d6b63;
+    -fx-background-color: #4F8CFF;
+    -fx-border-color: #4F8CFF;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #FFFFFF;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-padding: 7px 20px;
@@ -88,86 +116,106 @@
 }
 
 .btn-run:hover {
-    -fx-background-color: #0b5852;
-    -fx-border-color: #0b5852;
+    -fx-background-color: #3B72E0;
+    -fx-border-color: #3B72E0;
 }
 
 .btn-run:pressed {
-    -fx-background-color: #08433e;
+    -fx-background-color: #2F5ECC;
 }
 
 /* --------------------------------------------------------------------------
    Card Panels & Sidebars
    -------------------------------------------------------------------------- */
 .card-panel {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #141C2F;
     -fx-background-radius: 8px;
-    -fx-border-color: #e2e8f0;
+    -fx-border-color: #293650;
     -fx-border-radius: 8px;
     -fx-border-width: 1px;
     -fx-padding: 16px;
 }
 
 .section-title {
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
-    -fx-text-fill: #0f172a;
+    -fx-text-fill: #F1F5FF;
 }
 
 .field-label {
     -fx-font-size: 12px;
-    -fx-text-fill: #334155;
+    -fx-text-fill: #94A3B8;
 }
 
 .help-text {
     -fx-font-size: 11px;
-    -fx-text-fill: #64748b;
+    -fx-text-fill: #64748B;
     -fx-wrap-text: true;
 }
 
-/* Secondary table action buttons */
+/* Secondary Action Buttons */
 .btn-secondary {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #e2e8f0;
+    -fx-background-color: #1B2740;
+    -fx-border-color: #293650;
     -fx-border-radius: 4px;
     -fx-background-radius: 4px;
-    -fx-text-fill: #334155;
+    -fx-text-fill: #F1F5FF;
     -fx-font-size: 11px;
-    -fx-padding: 5px 10px;
+    -fx-font-weight: 600;
+    -fx-padding: 5px 12px;
     -fx-cursor: hand;
 }
 
 .btn-secondary:hover {
-    -fx-background-color: #f8fafc;
-    -fx-border-color: #cbd5e1;
+    -fx-background-color: #253555;
+    -fx-border-color: #4F8CFF;
 }
 
 /* --------------------------------------------------------------------------
-   Summary Metric Cards
+   Summary Metric Cards (KPIs)
    -------------------------------------------------------------------------- */
 .metric-card {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #141C2F;
     -fx-background-radius: 8px;
-    -fx-border-color: #e2e8f0;
     -fx-border-radius: 8px;
-    -fx-border-width: 1px;
     -fx-padding: 14px 18px;
     -fx-alignment: CENTER_LEFT;
+}
+
+.metric-card-blue {
+    -fx-border-color: #4F8CFF #293650 #293650 #293650;
+    -fx-border-width: 3px 1px 1px 1px;
+}
+
+.metric-card-violet {
+    -fx-border-color: #9875FF #293650 #293650 #293650;
+    -fx-border-width: 3px 1px 1px 1px;
+}
+
+.metric-card-mint {
+    -fx-border-color: #42D6AE #293650 #293650 #293650;
+    -fx-border-width: 3px 1px 1px 1px;
+}
+
+.metric-card-amber {
+    -fx-border-color: #FFB454 #293650 #293650 #293650;
+    -fx-border-width: 3px 1px 1px 1px;
 }
 
 .metric-value {
     -fx-font-size: 26px;
     -fx-font-weight: bold;
-    -fx-text-fill: #0f172a;
+    -fx-text-fill: #F1F5FF;
 }
 
 .metric-label {
     -fx-font-size: 11px;
-    -fx-text-fill: #64748b;
+    -fx-font-weight: 600;
+    -fx-text-fill: #94A3B8;
 }
 
 /* --------------------------------------------------------------------------
-   Tab Pane Styling (Modern underline tabs)
+   Tab Pane Styling (Midnight Modern Underline Tabs)
    -------------------------------------------------------------------------- */
 .dashboard-tabs {
     -fx-background-color: transparent;
@@ -185,50 +233,54 @@
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
-    -fx-padding: 10px 16px;
+    -fx-padding: 10px 18px;
     -fx-border-width: 0 0 2px 0;
     -fx-border-color: transparent;
     -fx-cursor: hand;
 }
 
 .dashboard-tabs .tab:selected {
-    -fx-border-color: #0d6b63;
+    -fx-border-color: #4F8CFF;
     -fx-border-width: 0 0 2px 0;
 }
 
 .dashboard-tabs .tab .tab-label {
     -fx-font-size: 13px;
     -fx-font-weight: 600;
-    -fx-text-fill: #64748b;
+    -fx-text-fill: #94A3B8;
+}
+
+.dashboard-tabs .tab:hover .tab-label {
+    -fx-text-fill: #F1F5FF;
 }
 
 .dashboard-tabs .tab:selected .tab-label {
-    -fx-text-fill: #0d6b63;
+    -fx-text-fill: #F1F5FF;
 }
 
 .dashboard-tabs .tab-content-area {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #141C2F;
     -fx-background-radius: 8px;
-    -fx-border-color: #e2e8f0;
+    -fx-border-color: #293650;
     -fx-border-radius: 8px;
     -fx-border-width: 1px;
     -fx-padding: 16px;
 }
 
 /* --------------------------------------------------------------------------
-   TableViews
+   TableViews (Dark Technical Look)
    -------------------------------------------------------------------------- */
 .table-view {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #e2e8f0;
+    -fx-background-color: #141C2F;
+    -fx-border-color: #293650;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
-    -fx-table-cell-border-color: #f1f5f9;
+    -fx-table-cell-border-color: #1B2740;
 }
 
 .table-view .column-header-background {
-    -fx-background-color: #f8fafc;
-    -fx-border-color: #e2e8f0;
+    -fx-background-color: #1B2740;
+    -fx-border-color: #293650;
     -fx-border-width: 0 0 1px 0;
 }
 
@@ -239,103 +291,168 @@
 }
 
 .table-view .column-header .label {
-    -fx-text-fill: #475569;
+    -fx-text-fill: #94A3B8;
     -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-alignment: CENTER_LEFT;
 }
 
 .table-row-cell {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #141C2F;
     -fx-border-color: transparent;
     -fx-padding: 4px 0;
     -fx-font-size: 12px;
 }
 
+.table-row-cell .text {
+    -fx-fill: #F1F5FF;
+}
+
 .table-row-cell:odd {
-    -fx-background-color: #fdfdfd;
+    -fx-background-color: #182238;
 }
 
 .table-row-cell:hover {
-    -fx-background-color: #f8fafc;
+    -fx-background-color: #1E2D4A;
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #f0fdfa;
-    -fx-text-fill: #0f172a;
+    -fx-background-color: #1B325A;
 }
 
 .table-row-cell:selected .text {
-    -fx-fill: #0f172a;
+    -fx-fill: #FFFFFF;
 }
 
 /* --------------------------------------------------------------------------
    Inputs, Comboboxes, Spinners
    -------------------------------------------------------------------------- */
-.text-field, .combo-box, .spinner {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #cbd5e1;
+.text-field,
+.combo-box,
+.spinner {
+    -fx-background-color: #1B2740;
+    -fx-border-color: #293650;
     -fx-border-radius: 4px;
     -fx-background-radius: 4px;
+    -fx-text-fill: #F1F5FF;
     -fx-padding: 3px 6px;
     -fx-font-size: 12px;
 }
 
-.text-field:focused, .combo-box:focused, .spinner:focused {
-    -fx-border-color: #0d6b63;
+.text-field:focused,
+.combo-box:focused,
+.spinner:focused {
+    -fx-border-color: #4F8CFF;
+}
+
+.spinner .text-field {
+    -fx-background-color: #1B2740;
+    -fx-text-fill: #F1F5FF;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: #1B2740;
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    -fx-background-color: #253555;
+}
+
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: #94A3B8;
 }
 
 .combo-box .list-cell {
+    -fx-background-color: #1B2740;
     -fx-font-size: 12px;
-    -fx-text-fill: #1e293b;
+    -fx-text-fill: #F1F5FF;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #1B2740;
+    -fx-border-color: #293650;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: #1B2740;
+    -fx-text-fill: #F1F5FF;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #253555;
+    -fx-text-fill: #F1F5FF;
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: #4F8CFF;
+    -fx-text-fill: #FFFFFF;
 }
 
 /* --------------------------------------------------------------------------
    Timeline Canvas & Badges
    -------------------------------------------------------------------------- */
 .timeline-scroll-pane {
-    -fx-background-color: #ffffff;
-    -fx-background: #ffffff;
-    -fx-border-color: transparent;
+    -fx-background-color: #141C2F;
+    -fx-background: #141C2F;
+    -fx-border-color: #293650;
+    -fx-border-radius: 6px;
     -fx-padding: 10px;
 }
 
 .legend-label {
     -fx-font-size: 11px;
     -fx-font-weight: 600;
-    -fx-text-fill: #334155;
+    -fx-text-fill: #F1F5FF;
 }
 
 .placeholder-text {
     -fx-font-size: 13px;
-    -fx-text-fill: #94a3b8;
+    -fx-text-fill: #94A3B8;
 }
 
 /* --------------------------------------------------------------------------
    Analysis Charts
    -------------------------------------------------------------------------- */
 .chart {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #141C2F;
     -fx-background-radius: 8px;
-    -fx-border-color: #e2e8f0;
+    -fx-border-color: #293650;
     -fx-border-radius: 8px;
     -fx-border-width: 1px;
     -fx-padding: 8px;
 }
 
+.chart-plot-background {
+    -fx-background-color: #0B1020;
+}
+
+.chart-vertical-grid-lines,
+.chart-horizontal-grid-lines {
+    -fx-stroke: #1B2740;
+}
+
 .chart-title {
-    -fx-text-fill: #0f172a;
+    -fx-text-fill: #F1F5FF;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
 
 .axis {
     -fx-tick-label-font-size: 10px;
-    -fx-tick-label-fill: #64748b;
+    -fx-tick-label-fill: #94A3B8;
+    -fx-tick-mark-stroke: #293650;
+}
+
+.axis:bottom,
+.axis:left {
+    -fx-border-color: #293650;
 }
 
 .axis-label {
-    -fx-text-fill: #475569;
+    -fx-text-fill: #F1F5FF;
     -fx-font-size: 11px;
     -fx-font-weight: 600;
 }
@@ -347,6 +464,44 @@
 
 .chart-legend-item {
     -fx-font-size: 11px;
-    -fx-text-fill: #334155;
+    -fx-text-fill: #F1F5FF;
     -fx-font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbars
+   -------------------------------------------------------------------------- */
+.scroll-pane {
+    -fx-background-color: #141C2F;
+    -fx-background: #141C2F;
+}
+
+.scroll-bar {
+    -fx-background-color: #141C2F;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #293650;
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #4F8CFF;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #141C2F;
+}
+
+/* --------------------------------------------------------------------------
+   Tooltips
+   -------------------------------------------------------------------------- */
+.tooltip {
+    -fx-background-color: #1B2740;
+    -fx-text-fill: #F1F5FF;
+    -fx-border-color: #4F8CFF;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-font-size: 11px;
+    -fx-padding: 6px 10px;
 }

@@ -2,6 +2,7 @@ package gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -11,6 +12,7 @@ import java.util.List;
 
 /**
  * Controller for the Process Metrics TableView.
+ * Formatted with Midnight Control Center styling and clear numerical alignment.
  */
 public class MetricsController {
 
@@ -35,7 +37,44 @@ public class MetricsController {
         colWaiting.setCellValueFactory(new PropertyValueFactory<>("waitingTime"));
         colResponse.setCellValueFactory(new PropertyValueFactory<>("responseTime"));
 
+        // Process ID column: Electric blue bold text
+        colPid.setCellFactory(tc -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item);
+                    setStyle("-fx-alignment: CENTER; -fx-text-fill: #4F8CFF; -fx-font-weight: bold;");
+                }
+            }
+        });
+
+        // Numeric columns: Center-aligned monospace soft white text
+        setupNumericColumn(colArrival);
+        setupNumericColumn(colBurst);
+        setupNumericColumn(colFinish);
+        setupNumericColumn(colTurnaround);
+        setupNumericColumn(colWaiting);
+        setupNumericColumn(colResponse);
+
         tableMetrics.setItems(processList);
+    }
+
+    private <T> void setupNumericColumn(TableColumn<Process, T> col) {
+        col.setCellFactory(tc -> new TableCell<>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setStyle("-fx-alignment: CENTER; -fx-text-fill: #F1F5FF; -fx-font-family: 'Consolas', monospace;");
+                }
+            }
+        });
     }
 
     public void setProcesses(List<Process> processes) {
