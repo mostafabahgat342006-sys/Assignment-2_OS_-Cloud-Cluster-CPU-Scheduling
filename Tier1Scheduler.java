@@ -45,6 +45,10 @@ public class Tier1Scheduler {
         return new ArrayList<>(queue);
     }
 
+    public Process peekNextProcess() {
+        return queue.peek();
+    }
+
     public Tier1Result runSlice(int time, Process lastProcess) {
         admitArrivals(time);
 
